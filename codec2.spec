@@ -1,13 +1,13 @@
 #
 # Conditional build:
 %bcond_with	tests	# unit tests
-%bcond_with	lpcnet	# LPCNet support
+%bcond_without	lpcnet	# LPCNet support
 #
 Summary:	Speech codec for 2400 bit/s and below
 Summary(pl.UTF-8):	Kodek mowy do przesyłania danych 2400 bitów/s i poniżej
 Name:		codec2
 Version:	0.9.2
-Release:	0.1
+Release:	1
 License:	LGPL v2.1
 Group:		Libraries
 #Source0Download: https://github.com/drowe67/codec2/releases

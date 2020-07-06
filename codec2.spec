@@ -1,18 +1,21 @@
 #
 # Conditional build:
-%bcond_with	tests		# unit tests
+%bcond_with	tests	# unit tests
+%bcond_with	lpcnet	# LPCNet support
 #
 Summary:	Speech codec for 2400 bit/s and below
 Summary(pl.UTF-8):	Kodek mowy do przesyłania danych 2400 bitów/s i poniżej
 Name:		codec2
-Version:	0.8.1
-Release:	1
+Version:	0.9.2
+Release:	0.1
 License:	LGPL v2.1
 Group:		Libraries
-Source0:	https://hobbes1069.fedorapeople.org/freetel/codec2/%{name}-%{version}.tar.xz
-# Source0-md5:	db383dda2a84fe97d93de621cce49a06
+#Source0Download: https://github.com/drowe67/codec2/releases
+Source0:	https://github.com/drowe67/codec2/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	e2f5e0a7a15f172ecb9875332d9a83e0
 URL:		http://rowetel.com/codec2.html
-BuildRequires:	cmake >= 2.8
+BuildRequires:	cmake >= 3.0
+%{?with_lpcnet:BuildRequires:	lpcnetfreedv-devel}
 %if %{with tests}
 BuildRequires:	libsamplerate-devel
 BuildRequires:	speex-devel
@@ -64,6 +67,7 @@ cd build
 %cmake .. \
 	-DCMAKE_INSTALL_INCLUDEDIR=include \
 	-DCMAKE_INSTALL_LIBDIR=%{_lib} \
+	%{?with_lpcnet:-DLPCNET=ON} \
 	%{!?with_tests:-DUNITTEST=OFF}
 
 %{__make}
@@ -83,29 +87,25 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README*
-%attr(755,root,root) %{_libdir}/libcodec2.so.0.8
+%attr(755,root,root) %{_libdir}/libcodec2.so.0.9
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libcodec2.so
 %{_includedir}/codec2
+%{_libdir}/cmake/codec2
 %{_pkgconfigdir}/codec2.pc
 
 %files tools
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/c2dec
-%attr(755,root,root) %{_bindir}/c2demo
 %attr(755,root,root) %{_bindir}/c2enc
-%attr(755,root,root) %{_bindir}/c2sim
 %attr(755,root,root) %{_bindir}/drs232
 %attr(755,root,root) %{_bindir}/drs232_ldpc
 %attr(755,root,root) %{_bindir}/fdmdv_demod
 %attr(755,root,root) %{_bindir}/fdmdv_get_test_bits
-%attr(755,root,root) %{_bindir}/fdmdv_interleave
 %attr(755,root,root) %{_bindir}/fdmdv_mod
 %attr(755,root,root) %{_bindir}/fdmdv_put_test_bits
-%attr(755,root,root) %{_bindir}/fec_dec
-%attr(755,root,root) %{_bindir}/fec_enc
 %attr(755,root,root) %{_bindir}/fm_demod
 %attr(755,root,root) %{_bindir}/fsk_mod
 %attr(755,root,root) %{_bindir}/insert_errors

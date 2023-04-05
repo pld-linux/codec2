@@ -6,16 +6,16 @@
 Summary:	Speech codec for 2400 bit/s and below
 Summary(pl.UTF-8):	Kodek mowy do przesyłania danych 2400 bitów/s i poniżej
 Name:		codec2
-Version:	0.9.2
+Version:	1.0.5
 Release:	1
 License:	LGPL v2.1
 Group:		Libraries
 #Source0Download: https://github.com/drowe67/codec2/releases
 Source0:	https://github.com/drowe67/codec2/archive/v%{version}/%{name}-%{version}.tar.gz
-# Source0-md5:	e2f5e0a7a15f172ecb9875332d9a83e0
+# Source0-md5:	16a09b210409bad137c91bb18eb7cb92
 URL:		http://rowetel.com/codec2.html
 BuildRequires:	cmake >= 3.0
-%{?with_lpcnet:BuildRequires:	lpcnetfreedv-devel}
+%{?with_lpcnet:BuildRequires:	lpcnetfreedv-devel >= 0.3}
 %if %{with tests}
 BuildRequires:	libsamplerate-devel
 BuildRequires:	speex-devel
@@ -74,9 +74,12 @@ cd build
 
 %install
 rm -rf $RPM_BUILD_ROOT
+install -d $RPM_BUILD_ROOT%{_bindir}
 
 %{__make} -C build install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install build/src/{c2dec,c2enc} $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -87,7 +90,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README*
-%attr(755,root,root) %{_libdir}/libcodec2.so.0.9
+%attr(755,root,root) %{_libdir}/libcodec2.so.1.0
 
 %files devel
 %defattr(644,root,root,755)
@@ -100,12 +103,3 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/c2dec
 %attr(755,root,root) %{_bindir}/c2enc
-%attr(755,root,root) %{_bindir}/drs232
-%attr(755,root,root) %{_bindir}/drs232_ldpc
-%attr(755,root,root) %{_bindir}/fdmdv_demod
-%attr(755,root,root) %{_bindir}/fdmdv_get_test_bits
-%attr(755,root,root) %{_bindir}/fdmdv_mod
-%attr(755,root,root) %{_bindir}/fdmdv_put_test_bits
-%attr(755,root,root) %{_bindir}/fm_demod
-%attr(755,root,root) %{_bindir}/fsk_mod
-%attr(755,root,root) %{_bindir}/insert_errors
